@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'web-fonts-with-css/css/fontawesome-all.min.css'%}" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/base.css'%}">
+	
+	<title>View To-Do List</title>
+
+</head>
+<body>
+	<div id="app" class="container">
+		<h2>Vue To-Do List</h2>
+		<div class="input-group">
+			<input placeholder="Adicionar novo item" type="text"  class="form-control" v-model="novoTodo" @keyup.enter="addTodo">
+			<span class="input-group-btn">
+				<button @click="addTodo" type="button" class="btn btn-primary">Adicionar!</button>
+			</span>	
+		</div>		
+		<table class="table table-hover">
+			<thead>
+			</thead>
+			<tbody>
+				<tr v-for="(todo, index) in todos" v-bind:class="{'removido':todo.checked}" @click="clickTodo(index)">
+					<td>
+						<input type="checkbox" name="list" v-model="todo.checked">
+					</td>
+					<td>
+						<big>[[todo.titulo]]</big>		
+					</td>
+					<td>
+						<button type="button" v-on:click="deleteTodo(index)" class="btn btn-default btn-sm">
+			        		<span class="fa fa-trash"></span> 
+			     		</button>
+					</td>
+				</tr>				 
+			</tbody>			
+		</table>
+	</div>	
+
+</body>
+</html>
+
+<script type="text/javascript" src="{% static 'js/vue.min.js'%}"></script>
+<script type="text/javascript">
+		var data = {
+			todos: [
+				{ titulo: 'Lavar o carro', checked: true},
+				{ titulo: 'Estudar Algoritmos', checked: false},
+			],
+			novoTodo: ''
+		};
+		var app = new Vue({
+			delimiters: ['[[', ']]'],
+			el: '#app',
+			data: data,
+			methods: {
+				addTodo: function() {
+					var item = this.novoTodo.trim();
+					if (item) {
+						this.todos.push({
+							titulo: item,
+							checked: false
+						});
+						this.novoTodo = '';
+					}
+				},
+				deleteTodo: function(index){
+					this.todos.splice(index, 1)
+				},
+				clickTodo: function(index){
+					this.todos[index].checked = !this.todos[index].checked
+				},
+				
+			},
+		})
+
+	</script>

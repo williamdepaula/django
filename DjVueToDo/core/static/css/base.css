@@ -1,0 +1,15 @@
+.container {
+	width: 60%;
+	margin: 20px auto 0px auto;
+	color: black;
+}
+
+ul li {
+	list-style-type: none;
+	margin: 0 0 0 -40px;
+}
+
+.removido {
+	color: gray;
+	text-decoration: line-through;
+}
