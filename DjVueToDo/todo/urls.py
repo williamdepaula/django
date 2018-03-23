@@ -20,4 +20,6 @@ from core import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
+    path('todos/', views.TodoList.as_view(), name='todo'),
+    path('todo/<int:pk>/', views.TodoDetail.as_view(), name="todo-detail"),
 ]

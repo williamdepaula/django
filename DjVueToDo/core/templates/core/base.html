@@ -24,32 +24,42 @@
 			<thead>
 			</thead>
 			<tbody>
-				<tr v-for="(todo, index) in todos" v-bind:class="{'removido':todo.checked}" @click="clickTodo(index)">
+				<tr v-for="(todo, index) in todos">
 					<td>
 						<input type="checkbox" name="list" v-model="todo.checked">
 					</td>
 					<td>
-						<big>[[todo.titulo]]</big>		
+						<big v-bind:class="{'removido':todo.checked}">[[todo.title]]</big>		
 					</td>
+					
 					<td>
+						<button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="Inciar Pomodoro">
+							<span class="fa fa-stopwatch"></span> 
+			     			<span class="badge badge-light">[[todo.pomodoros]]</span>
+			     			
+			     		</button>
 						<button type="button" v-on:click="deleteTodo(index)" class="btn btn-default btn-sm">
 			        		<span class="fa fa-trash"></span> 
 			     		</button>
+			     		
 					</td>
 				</tr>				 
 			</tbody>			
 		</table>
+		
 	</div>	
 
 </body>
 </html>
 
-<script type="text/javascript" src="{% static 'js/vue.min.js'%}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+
+
+</script>
+<script type="text/javascript" src="{% static 'js/vue.js'%}"></script>
 <script type="text/javascript">
 		var data = {
 			todos: [
-				{ titulo: 'Lavar o carro', checked: true},
-				{ titulo: 'Estudar Algoritmos', checked: false},
 			],
 			novoTodo: ''
 		};
@@ -59,14 +69,16 @@
 			data: data,
 			methods: {
 				addTodo: function() {
-					var item = this.novoTodo.trim();
+					/* var item = this.novoTodo.trim();
 					if (item) {
 						this.todos.push({
-							titulo: item,
-							checked: false
+							title: item,
+							checked: false,
+							pomodoros: 0
 						});
 						this.novoTodo = '';
-					}
+					} */
+					this.getTodos();
 				},
 				deleteTodo: function(index){
 					this.todos.splice(index, 1)
@@ -74,7 +86,22 @@
 				clickTodo: function(index){
 					this.todos[index].checked = !this.todos[index].checked
 				},
+				getTodos: function() {
+					fetch('http://localhost:8000/todos/')
+						.then(response => response.json())
+						.then(json => {
+							this.todos = json
+					})
+				},
 				
+			},
+			created () {
+				/*fetch('http://localhost:8000/todos/')
+					.then(response => response.json())
+					.then(json => {
+						this.todos = json
+					})*/
+				this.getTodos();
 			},
 		})
 
